@@ -1,0 +1,60 @@
+{
+  "name": "react-table-container",
+  "version": "0.1.0",
+  "description": "A React component container for the HTML <table> element that allows it to be of any specified dimensions while locking its header during scrolling",
+  "main": "lib/react-table-container.js",
+  "module": "es/react-table-container.js",
+  "jsnext:main": "es/react-table-container.js",
+  "typings": "./index.d.ts",
+  "files": [
+    "lib",
+    "es",
+    "dist",
+    "src",
+    "./index.d.ts"
+  ],
+  "scripts": {
+    "clean": "rimraf lib es dist",
+    "build:commonjs": "rollup -c -f cjs -o lib/react-table-container.js",
+    "build:es": "rollup -c -f es -o es/react-table-container.js",
+    "build:umd": "rollup -c -f umd -g react:React -n ReactTableContainer -o dist/react-table-container.js",
+    "build": "npm run build:commonjs && npm run build:es && npm run build:umd",
+    "prepare": "npm run clean && npm run build",
+    "tslint-check": "tslint-config-prettier-check ./tslint.json",
+    "lint": "tslint --project ./tsconfig.json --config ./tslint.json",
+    "prettify": "prettier --write \"src/**/*.{ts,tsx}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tiagovtristao/react-table-container/react-table-container.git"
+  },
+  "keywords": [
+    "react",
+    "table",
+    "thead",
+    "header",
+    "fixed",
+    "lock",
+    "scroll",
+    "html"
+  ],
+  "author": "Tiago Tristao",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tiagovtristao/react-table-container/issues"
+  },
+  "devDependencies": {
+    "@types/react": "^15.0.39",
+    "prettier": "^1.7.4",
+    "react": "^15.5.4",
+    "rimraf": "^2.6.2",
+    "rollup": "^0.50.1",
+    "rollup-plugin-typescript2": "^0.8.1",
+    "tslint": "^5.8.0",
+    "tslint-config-prettier": "^1.6.0",
+    "typescript": "^2.5.3"
+  },
+  "peerDependencies": {
+    "react": "^15.0.0-0 || ^16.0.0-0"
+  }
+}
