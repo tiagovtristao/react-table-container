@@ -9,6 +9,7 @@ interface Props {
   };
   width: string;
   height: string;
+  maxHeight?: string;
 }
 
  export default class ReactTableContainer extends React.Component<Props> {}
