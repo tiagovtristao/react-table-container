@@ -31,12 +31,12 @@
   "keywords": [
     "react",
     "table",
+    "container",
     "thead",
     "header",
     "fixed",
     "lock",
-    "scroll",
-    "html"
+    "scroll"
   ],
   "author": "Tiago Tristao",
   "license": "MIT",
