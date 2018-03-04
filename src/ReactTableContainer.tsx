@@ -106,7 +106,6 @@ export default class ReactTableContainer extends React.Component<IProps, IState>
     const containerStyle: React.CSSProperties = {
       boxSizing: "border-box",
       position: "relative",
-      display: "inline-block",
       overflow: "hidden",
       width,
       height
