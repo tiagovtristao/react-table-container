@@ -1,6 +1,6 @@
 {
   "name": "react-table-container",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A React component container for the HTML <table> element that allows it to be of any specified dimensions while locking its header during scrolling",
   "main": "lib/react-table-container.js",
   "module": "es/react-table-container.js",
