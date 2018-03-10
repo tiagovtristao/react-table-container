@@ -9,6 +9,7 @@ interface Props {
   };
   width: string;
   height: string;
+  maxWidth?: string;
   maxHeight?: string;
 }
 
