@@ -44,17 +44,17 @@
     "url": "https://github.com/tiagovtristao/react-table-container/issues"
   },
   "devDependencies": {
-    "@types/react": "^15.0.39",
-    "prettier": "^1.7.4",
-    "react": "^15.5.4",
+    "@types/react": "^16.0.40",
+    "prettier": "^1.11.1",
+    "react": "^16.2.0",
     "rimraf": "^2.6.2",
     "rollup": "^0.50.1",
-    "rollup-plugin-typescript2": "^0.8.1",
-    "tslint": "^5.8.0",
-    "tslint-config-prettier": "^1.6.0",
-    "typescript": "^2.5.3"
+    "rollup-plugin-typescript2": "^0.8.4",
+    "tslint": "^5.9.1",
+    "tslint-config-prettier": "^1.9.0",
+    "typescript": "^2.7.2"
   },
   "peerDependencies": {
-    "react": "^15.0.0-0 || ^16.0.0-0"
+    "react": "^15.0.0 || ^16"
   }
 }
