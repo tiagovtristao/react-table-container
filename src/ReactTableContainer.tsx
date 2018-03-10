@@ -34,7 +34,10 @@ interface IState {
   previousSwipeClientY: number;
 }
 
-export default class ReactTableContainer extends React.Component<IProps, IState> {
+export default class ReactTableContainer extends React.Component<
+  IProps,
+  IState
+> {
   private readonly headerTableId = 0;
   private readonly mainTableId = 1;
 
@@ -97,7 +100,14 @@ export default class ReactTableContainer extends React.Component<IProps, IState>
   }
 
   public render(): JSX.Element {
-    const { children, scrollbarStyle, width, height, maxWidth, maxHeight } = this.props;
+    const {
+      children,
+      scrollbarStyle,
+      width,
+      height,
+      maxWidth,
+      maxHeight
+    } = this.props;
     const {
       tableMarginTop,
       verticalPercentageScrolled,
@@ -108,6 +118,7 @@ export default class ReactTableContainer extends React.Component<IProps, IState>
     const containerStyle: React.CSSProperties = {
       boxSizing: "border-box",
       position: "relative",
+      display: "inline-block",
       overflow: "hidden",
       width,
       height
