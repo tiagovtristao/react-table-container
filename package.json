@@ -5,7 +5,7 @@
   "main": "lib/react-table-container.js",
   "module": "es/react-table-container.js",
   "jsnext:main": "es/react-table-container.js",
-  "typings": "./index.d.ts",
+  "typings": "index.d.ts",
   "files": [
     "lib",
     "es",
