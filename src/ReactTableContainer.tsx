@@ -16,6 +16,7 @@ interface IProps {
   scrollbarStyle?: IScrollbarStyle;
   width: string;
   height: string;
+  maxHeight?: string;
 }
 
 interface IState {
@@ -95,7 +96,7 @@ export default class ReactTableContainer extends React.Component<IProps, IState>
   }
 
   public render(): JSX.Element {
-    const { children, scrollbarStyle, width, height } = this.props;
+    const { children, scrollbarStyle, width, height, maxHeight } = this.props;
     const {
       tableMarginTop,
       verticalPercentageScrolled,
@@ -110,6 +111,10 @@ export default class ReactTableContainer extends React.Component<IProps, IState>
       width,
       height
     };
+
+    if (maxHeight !== undefined) {
+      containerStyle.maxHeight = maxHeight;
+    }
 
     const htmlTable = React.Children.only(children) as React.ReactElement<any>;
 

@@ -58,6 +58,7 @@ class MyTable extends Component {
 
 * `width`: Any valid CSS value. **Required**.
 * `height`: Any valid CSS value. **Required**.
+* `maxHeight`: Any valid CSS value. **Optional**.
 * `scrollbarStyle`: Object (below) to change the default scrollbar style. **Optional**.
    ```js
    {
