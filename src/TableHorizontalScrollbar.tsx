@@ -173,8 +173,6 @@ export class TableHorizontalScrollbar extends React.Component<IProps, IState> {
   };
 
   private onMouseMove = (event: MouseEvent): void => {
-    event.preventDefault();
-
     /* tslint:disable:prefer-const */
     let {
       percentageScrolled,
