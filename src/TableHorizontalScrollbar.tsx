@@ -187,6 +187,8 @@ export class TableHorizontalScrollbar extends React.Component<IProps, IState> {
       return;
     }
 
+    event.preventDefault();
+
     const currentMoveClientX = event.clientX;
     const deltaX = currentMoveClientX - previousMoveClientX;
 
@@ -210,13 +212,13 @@ export class TableHorizontalScrollbar extends React.Component<IProps, IState> {
   };
 
   private onMouseUp = (event: MouseEvent): void => {
-    event.preventDefault();
-
     const { isMoving } = this.state;
 
     if (!isMoving) {
       return;
     }
+
+    event.preventDefault();
 
     this.setState({
       isMoving: false,
