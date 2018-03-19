@@ -187,8 +187,6 @@ export class TableVerticalScrollbar extends React.Component<IProps, IState> {
   };
 
   private onMouseMove = (event: MouseEvent): void => {
-    event.preventDefault();
-
     /* tslint:disable:prefer-const */
     let {
       percentageScrolled,
@@ -203,6 +201,8 @@ export class TableVerticalScrollbar extends React.Component<IProps, IState> {
     if (!isMoving) {
       return;
     }
+
+    event.preventDefault();
 
     const currentMoveClientY = event.clientY;
     const deltaY = currentMoveClientY - previousMoveClientY;
@@ -228,9 +228,13 @@ export class TableVerticalScrollbar extends React.Component<IProps, IState> {
   };
 
   private onMouseUp = (event: MouseEvent): void => {
-    event.preventDefault();
-
     const { isMoving } = this.state;
+
+    if (!isMoving) {
+      return;
+    }
+
+    event.preventDefault();
 
     this.setState({
       isMoving: false,
