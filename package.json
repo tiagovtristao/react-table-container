@@ -2,9 +2,23 @@
   "name": "react-table-container",
   "version": "0.2.2",
   "description": "A React component container for the HTML <table> element that allows it to be of any specified dimensions while locking its header during scrolling",
+  "license": "MIT",
+  "repository": "github:tiagovtristao:react-table-container",
+  "bugs": "https://github.com/tiagovtristao/react-table-container/issues",
+  "keywords": [
+    "react",
+    "table",
+    "container",
+    "thead",
+    "header",
+    "fixed",
+    "lock",
+    "scroll"
+  ],
+  "author": "Tiago Tristao (https://github.com/tiagovtristao)",
   "main": "lib/react-table-container.js",
   "module": "es/react-table-container.js",
-  "jsnext:main": "es/react-table-container.js",
+  "unpkg": "dist/react-table-container.js",
   "typings": "./index.d.ts",
   "files": [
     "lib",
@@ -24,37 +38,35 @@
     "lint": "tslint --project ./tsconfig.json --config ./tslint.json",
     "prettify": "prettier --write \"src/**/*.{ts,tsx}\""
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tiagovtristao/react-table-container/react-table-container.git"
-  },
-  "keywords": [
-    "react",
-    "table",
-    "container",
-    "thead",
-    "header",
-    "fixed",
-    "lock",
-    "scroll"
-  ],
-  "author": "Tiago Tristao",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/tiagovtristao/react-table-container/issues"
-  },
   "devDependencies": {
+    "@types/jest": "^23.3.0",
     "@types/react": "^16.0.40",
+    "jest": "^23.4.1",
     "prettier": "^1.11.1",
     "react": "^16.2.0",
     "rimraf": "^2.6.2",
     "rollup": "^0.50.1",
     "rollup-plugin-typescript2": "^0.8.4",
+    "ts-jest": "^23.0.1",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.9.0",
     "typescript": "^2.7.2"
   },
   "peerDependencies": {
-    "react": "^15.0.0 || ^16"
+    "react": "^15 || ^16"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }
