@@ -70,7 +70,7 @@ export default class ReactTableContainer extends React.Component<
 
   public componentDidMount(): void {
     this.table = this.container.querySelector(
-      `[data-fht-id="${this.mainTableId}"]`
+      `[data-rtc-id="${this.mainTableId}"]`
     ) as HTMLTableElement;
     this.tbody = this.table.querySelector("tbody");
 
@@ -149,7 +149,7 @@ export default class ReactTableContainer extends React.Component<
     // Set header table props
     const headerTableProps = { ...htmlTable.props };
 
-    headerTableProps["data-fht-id"] = this.headerTableId;
+    headerTableProps["data-rtc-id"] = this.headerTableId;
 
     const headerTableStyle = {
       borderSpacing: 0,
@@ -166,7 +166,7 @@ export default class ReactTableContainer extends React.Component<
     // Set main table props
     const mainTableProps = { ...htmlTable.props };
 
-    mainTableProps["data-fht-id"] = this.mainTableId;
+    mainTableProps["data-rtc-id"] = this.mainTableId;
 
     const mainTableStyle = {
       borderSpacing: 0,
@@ -222,10 +222,10 @@ export default class ReactTableContainer extends React.Component<
   // Make the header table's header cells the same width as the main table's header cells
   private refreshHeaders = (): void => {
     const headerTableHeaderRow = this.container.querySelector(
-      `[data-fht-id="${this.headerTableId}"] thead tr:first-child`
+      `[data-rtc-id="${this.headerTableId}"] thead tr:first-child`
     );
     const mainTableHeaderRow = this.container.querySelector(
-      `[data-fht-id="${this.mainTableId}"] thead tr:first-child`
+      `[data-rtc-id="${this.mainTableId}"] thead tr:first-child`
     );
 
     if (headerTableHeaderRow && mainTableHeaderRow) {
