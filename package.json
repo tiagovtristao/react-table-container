@@ -36,14 +36,26 @@
     "prepare": "npm run clean && npm run build",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "lint": "tslint --project ./tsconfig.json --config ./tslint.json",
-    "prettify": "prettier --write \"src/**/*.{ts,tsx}\""
+    "prettify": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "test": "jest"
   },
   "devDependencies": {
+    "@types/expect-puppeteer": "^2.2.4",
     "@types/jest": "^23.3.0",
+    "@types/jest-environment-puppeteer": "^2.2.1",
+    "@types/puppeteer": "^1.5.1",
     "@types/react": "^16.0.40",
+    "chalk": "^2.4.1",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "jest": "^23.4.1",
+    "jest-environment-node": "^23.4.0",
+    "jest-puppeteer": "^3.2.1",
+    "mkdirp": "^0.5.1",
     "prettier": "^1.11.1",
+    "puppeteer": "^1.6.1",
     "react": "^16.2.0",
+    "react-dom": "^16.4.1",
     "rimraf": "^2.6.2",
     "rollup": "^0.50.1",
     "rollup-plugin-typescript2": "^0.8.4",
@@ -54,19 +66,5 @@
   },
   "peerDependencies": {
     "react": "^15 || ^16"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
   }
 }
