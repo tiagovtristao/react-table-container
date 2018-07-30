@@ -1,5 +1,5 @@
 import * as React from "react";
-import ReactDOMServer from 'react-dom/server';
+import * as ReactDOMServer from 'react-dom/server';
 import ReactTableContainer from "../src/index";
 
 const tableHtml = `
@@ -82,9 +82,9 @@ describe(
         </ReactTableContainer>
       );
 
-      await page.evaluate(() => {
-        document.querySelector('#app').innerHTML = wrapper;
-      });
+      await page.evaluate((html) => {
+        document.querySelector('#app').innerHTML = html;
+      }, wrapper);
 
       await expect(page.$('table')).resolves.not.toBeNull();
     })
