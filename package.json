@@ -3,7 +3,10 @@
   "version": "0.2.2",
   "description": "A React component container for the HTML <table> element that allows it to be of any specified dimensions while locking its header during scrolling",
   "license": "MIT",
-  "repository": "github:tiagovtristao:react-table-container",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tiagovtristao/react-table-container.git"
+  },
   "bugs": "https://github.com/tiagovtristao/react-table-container/issues",
   "keywords": [
     "react",
