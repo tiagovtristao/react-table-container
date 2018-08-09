@@ -30,7 +30,7 @@ const containerHTML = (dimensions) => (
   )
 );
 
-describe('rendered dimensions', () => {
+describe('container', () => {
   let page;
 
   beforeAll(async () => {
@@ -41,6 +41,12 @@ describe('rendered dimensions', () => {
       <html>
       <head>
         <meta charset="UTF-8">
+        <style>
+          #app {
+            width: 1000px;
+            height: 1000px;
+          }
+        </style>
       </head>
       <body>
         <div id="app"></div>
@@ -72,7 +78,7 @@ describe('rendered dimensions', () => {
     return computedDimensions;
   };
 
-  it('are 100px by 100px for the container', async () => {
+  it('renders \'100px\' by \'100px\'', async () => {
     expect.assertions(2);
 
     await attachTable({ width: '100px', height: '100px' });
@@ -81,5 +87,29 @@ describe('rendered dimensions', () => {
 
     expect(width).toBe('100px');
     expect(height).toBe('100px');
+  });
+
+  it('renders \'100%\' by \'100%\' (ie. the dimensions of the parent component)', async () => {
+    expect.assertions(2);
+
+    await attachTable({ width: '100%', height: '100%' });
+
+    let parentContainerDimensions = await getComputedDimensions('#app');
+    let containerDimensions = await getComputedDimensions('#app > div');
+
+    expect(containerDimensions.width).toBe(parentContainerDimensions.width);
+    expect(containerDimensions.height).toBe(parentContainerDimensions.height);
+  });
+
+  it('renders \'auto\' by \'auto\' (ie. the dimensions of the table itself)', async () => {
+    expect.assertions(2);
+
+    await attachTable({ width: 'auto', height: 'auto' });
+
+    let containerDimensions = await getComputedDimensions('#app > div');
+    let tableDimensions = await getComputedDimensions('#app table[data-rtc-id="1"]');
+
+    expect(containerDimensions.width).toBe(tableDimensions.width);
+    expect(containerDimensions.height).toBe(tableDimensions.height);
   });
 });
