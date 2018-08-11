@@ -44,7 +44,7 @@ export default class ReactTableContainer extends React.Component<
   // HTML table header related elements
   private readonly headerRelatedElements = ["colgroup", "thead"];
 
-  private timeoutId = -1;
+  private timeoutId = null;
 
   private container: HTMLElement;
   private table: HTMLTableElement;
