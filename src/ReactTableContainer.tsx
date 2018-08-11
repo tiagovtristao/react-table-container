@@ -38,8 +38,8 @@ export default class ReactTableContainer extends React.Component<
   IProps,
   IState
 > {
-  private readonly headerTableId = 0;
-  private readonly mainTableId = 1;
+  private readonly headerTableId = "header-table";
+  private readonly mainTableId = "main-table";
 
   // HTML table header related elements
   private readonly headerRelatedElements = ["colgroup", "thead"];

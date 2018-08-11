@@ -107,7 +107,7 @@ describe('container', () => {
     await attachTable({ width: 'auto', height: 'auto' });
 
     let containerDimensions = await getComputedDimensions('#app > div');
-    let tableDimensions = await getComputedDimensions('#app table[data-rtc-id="1"]');
+    let tableDimensions = await getComputedDimensions('#app table[data-rtc-id="main-table"]');
 
     expect(containerDimensions.width).toBe(tableDimensions.width);
     expect(containerDimensions.height).toBe(tableDimensions.height);
