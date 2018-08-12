@@ -90,7 +90,6 @@ export class TableHorizontalScrollbar extends React.Component<IProps, IState> {
       bottom: 0,
       left: 0,
       backgroundColor: "#E3E5EB",
-      borderRadius: 4,
       height: 8
     };
 

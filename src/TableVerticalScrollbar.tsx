@@ -98,7 +98,6 @@ export class TableVerticalScrollbar extends React.Component<IProps, IState> {
       right: 0,
       bottom: 0,
       backgroundColor: "#E3E5EB",
-      borderRadius: 4,
       width: 8
     };
 
