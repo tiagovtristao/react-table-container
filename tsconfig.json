@@ -3,7 +3,8 @@
     "alwaysStrict": true,
     "downlevelIteration": true,
     "jsx": "react",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "strictNullChecks": true
   },
   "include":[
     "src/**/*"

@@ -14,6 +14,7 @@ interface IDimensions {
 
 interface IProps {
   scrollbarStyle?: IScrollbarStyle;
+  customHeader?: Array<React.ComponentClass<any> | React.SFC<any>>;
   width: string;
   height: string;
   maxWidth?: string;
@@ -41,8 +42,8 @@ export default class ReactTableContainer extends React.Component<
   private readonly headerTableId = "header-table";
   private readonly mainTableId = "main-table";
 
-  // HTML table header related elements
-  private readonly headerRelatedElements = ["colgroup", "thead"];
+  // Table header related html elements
+  private readonly headerRelatedHTMLElements = ["colgroup", "thead"];
 
   private timeoutId = null;
 
@@ -103,6 +104,7 @@ export default class ReactTableContainer extends React.Component<
     const {
       children,
       scrollbarStyle,
+      customHeader,
       width,
       height,
       maxWidth,
@@ -124,30 +126,35 @@ export default class ReactTableContainer extends React.Component<
       height
     };
 
-    if (maxWidth !== undefined) {
+    if (maxWidth) {
       containerStyle.maxWidth = maxWidth;
     }
 
-    if (maxHeight !== undefined) {
+    if (maxHeight) {
       containerStyle.maxHeight = maxHeight;
     }
 
-    const htmlTable = React.Children.only(children) as React.ReactElement<any>;
+    const table = React.Children.only(children) as React.ReactElement<any>;
 
-    const htmlTableChildren = React.Children.toArray(
-      htmlTable.props.children
-    ) as Array<React.ReactElement<any>>;
+    const tableChildren = React.Children.toArray(table.props.children) as Array<
+      React.ReactElement<any>
+    >;
 
-    // Extract out table header related html elements
-    const headerRelatedChildren = htmlTableChildren.filter(child => {
-      return (
-        typeof child.type === "string" &&
-        this.headerRelatedElements.indexOf(child.type as string) > -1
-      );
+    // Extract out header related children
+    const headerRelatedChildren = tableChildren.filter(({ type }) => {
+      let headerRelatedItems: Array<
+        string | React.ComponentClass<any> | React.SFC<any>
+      > = [...this.headerRelatedHTMLElements];
+
+      if (customHeader) {
+        headerRelatedItems = [...headerRelatedItems, ...customHeader];
+      }
+
+      return headerRelatedItems.indexOf(type) > -1;
     });
 
     // Set header table props
-    const headerTableProps = { ...htmlTable.props };
+    const headerTableProps = { ...table.props };
 
     headerTableProps["data-rtc-id"] = this.headerTableId;
 
@@ -164,7 +171,7 @@ export default class ReactTableContainer extends React.Component<
       : headerTableStyle;
 
     // Set main table props
-    const mainTableProps = { ...htmlTable.props };
+    const mainTableProps = { ...table.props };
 
     mainTableProps["data-rtc-id"] = this.mainTableId;
 
@@ -180,9 +187,9 @@ export default class ReactTableContainer extends React.Component<
 
     return (
       <div ref={ref => (this.container = ref)} style={containerStyle}>
-        {React.cloneElement(htmlTable, headerTableProps, headerRelatedChildren)}
+        {React.cloneElement(table, headerTableProps, headerRelatedChildren)}
 
-        {React.cloneElement(htmlTable, mainTableProps)}
+        {React.cloneElement(table, mainTableProps)}
 
         <TableVerticalScrollbar
           customStyle={scrollbarStyle}
