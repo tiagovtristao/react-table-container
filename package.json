@@ -32,10 +32,7 @@
   ],
   "scripts": {
     "clean": "rimraf lib es dist",
-    "build:commonjs": "rollup -c -f cjs -o lib/react-table-container.js",
-    "build:es": "rollup -c -f es -o es/react-table-container.js",
-    "build:umd": "rollup -c -f umd -g react:React -n ReactTableContainer -o dist/react-table-container.js",
-    "build": "npm run build:commonjs && npm run build:es && npm run build:umd",
+    "build": "rollup -c",
     "prepare": "npm run clean && npm run build",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "lint": "tslint --project ./tsconfig.json --config ./tslint.json",
@@ -60,14 +57,18 @@
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "rimraf": "^2.6.2",
-    "rollup": "^0.50.1",
-    "rollup-plugin-typescript2": "^0.8.4",
+    "rollup": "^0.64.1",
+    "rollup-plugin-commonjs": "^9.1.5",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-typescript2": "^0.16.1",
+    "rollup-plugin-uglify": "^4.0.0",
     "ts-jest": "^23.0.1",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.9.0",
     "typescript": "^2.9.2"
   },
   "peerDependencies": {
-    "react": "^0.14.0 || ^15.0.0 || ^16"
+    "react": "^0.14.0 || ^15.0.0 || ^16",
+    "react-dom": "^0.14.0 || ^15.0.0 || ^16"
   }
 }

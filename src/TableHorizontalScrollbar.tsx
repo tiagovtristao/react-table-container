@@ -1,9 +1,10 @@
 import * as React from "react";
+import * as ReactDOM from "react-dom";
 
 interface IProps {
-  customStyle?: IScrollbarStyle;
-  container: HTMLElement;
-  table: HTMLTableElement;
+  style?: IScrollbarStyle;
+  containerRef: HTMLDivElement;
+  tableRef;
   scrollTo: number;
   onScroll: (scrollTo: number) => void;
 }
@@ -13,9 +14,6 @@ interface IState {
   containerWidth: number;
   tableWidth: number;
   scrollbarWidth: number;
-  percentageScrolled: number;
-  isMoving: boolean;
-  previousMoveClientX: number;
 }
 
 export interface IScrollbarStyle {
@@ -28,7 +26,10 @@ export interface IScrollbarStyle {
 export class TableHorizontalScrollbar extends React.Component<IProps, IState> {
   private readonly minHeight = 15;
 
-  private scrollbar: HTMLElement;
+  private scrollbarRef: HTMLDivElement;
+
+  private isMoving: boolean;
+  private previousMoveClientX: number;
 
   constructor(props: IProps) {
     super(props);
@@ -37,33 +38,35 @@ export class TableHorizontalScrollbar extends React.Component<IProps, IState> {
       focused: false,
       containerWidth: 0,
       tableWidth: 0,
-      scrollbarWidth: 0,
-      percentageScrolled: props.scrollTo,
-      isMoving: false,
-      previousMoveClientX: 0
+      scrollbarWidth: 0
     };
+
+    this.isMoving = false;
+    this.previousMoveClientX = 0;
   }
 
   public componentDidMount(): void {
     this.calculateDimensions();
 
-    this.scrollbar.addEventListener("mousedown", this.onMouseDown);
+    this.scrollbarRef.addEventListener("mousedown", this.onMouseDown);
     window.addEventListener("mousemove", this.onMouseMove);
     window.addEventListener("mouseup", this.onMouseUp);
   }
 
-  public componentWillReceiveProps(nextProps: IProps): void {
-    if (this.state.percentageScrolled !== nextProps.scrollTo) {
-      this.setState({ percentageScrolled: nextProps.scrollTo });
-    }
+  public componentWillUnmount(): void {
+    this.scrollbarRef.removeEventListener("mousedown", this.onMouseDown);
+    window.removeEventListener("mousemove", this.onMouseMove);
+    window.removeEventListener("mouseup", this.onMouseUp);
   }
 
   public componentDidUpdate(): void {
-    const { container, table } = this.props;
+    const { containerRef, tableRef } = this.props;
     const { containerWidth, tableWidth } = this.state;
 
-    const newContainerWidth = container.getBoundingClientRect().width;
-    const newTableWidth = table.getBoundingClientRect().width;
+    let newContainerWidth = containerRef.getBoundingClientRect().width;
+    let newTableWidth = (ReactDOM.findDOMNode(
+      tableRef
+    ) as HTMLTableElement).getBoundingClientRect().width;
 
     if (containerWidth !== newContainerWidth || tableWidth !== newTableWidth) {
       this.calculateDimensions();
@@ -71,16 +74,10 @@ export class TableHorizontalScrollbar extends React.Component<IProps, IState> {
   }
 
   public render(): JSX.Element {
-    const { customStyle, table } = this.props;
-    const {
-      focused,
-      percentageScrolled,
-      containerWidth,
-      tableWidth,
-      scrollbarWidth
-    } = this.state;
+    const { style, tableRef, scrollTo } = this.props;
+    const { focused, containerWidth, tableWidth, scrollbarWidth } = this.state;
 
-    const isScrollable = table ? containerWidth < tableWidth : false;
+    let isScrollable = tableRef ? containerWidth < tableWidth : false;
 
     let scrollbarContainerStyle: React.CSSProperties = {
       display: isScrollable ? "block" : "none",
@@ -93,14 +90,13 @@ export class TableHorizontalScrollbar extends React.Component<IProps, IState> {
       height: 8
     };
 
-    scrollbarContainerStyle = customStyle
+    scrollbarContainerStyle = style
       ? focused
-        ? { ...scrollbarContainerStyle, ...customStyle.backgroundFocus }
-        : { ...scrollbarContainerStyle, ...customStyle.background }
+        ? { ...scrollbarContainerStyle, ...style.backgroundFocus }
+        : { ...scrollbarContainerStyle, ...style.background }
       : scrollbarContainerStyle;
 
-    const scrollbarPositionLeft =
-      (containerWidth - scrollbarWidth) * percentageScrolled;
+    let scrollbarPositionLeft = (containerWidth - scrollbarWidth) * scrollTo;
 
     let scrollbarStyle: React.CSSProperties = {
       boxSizing: "border-box",
@@ -113,10 +109,10 @@ export class TableHorizontalScrollbar extends React.Component<IProps, IState> {
       height: 8
     };
 
-    scrollbarStyle = customStyle
+    scrollbarStyle = style
       ? focused
-        ? { ...scrollbarStyle, ...customStyle.foregroundFocus }
-        : { ...scrollbarStyle, ...customStyle.foreground }
+        ? { ...scrollbarStyle, ...style.foregroundFocus }
+        : { ...scrollbarStyle, ...style.foreground }
       : scrollbarStyle;
 
     return (
@@ -125,26 +121,22 @@ export class TableHorizontalScrollbar extends React.Component<IProps, IState> {
         onMouseOver={this.onMouseOver}
         onMouseOut={this.onMouseOut}
       >
-        <div ref={ref => (this.scrollbar = ref)} style={scrollbarStyle} />
+        <div ref={ref => (this.scrollbarRef = ref)} style={scrollbarStyle} />
       </div>
     );
   }
 
-  public componentWillUnmount(): void {
-    this.scrollbar.removeEventListener("mousedown", this.onMouseDown);
-    window.removeEventListener("mousemove", this.onMouseMove);
-    window.removeEventListener("mouseup", this.onMouseUp);
-  }
-
   private calculateDimensions(): void {
-    const { container, table } = this.props;
+    const { containerRef, tableRef } = this.props;
 
-    if (!container || !table) {
+    if (!containerRef || !tableRef) {
       return;
     }
 
-    const tableWidth = table.getBoundingClientRect().width;
-    const containerWidth = container.getBoundingClientRect().width;
+    let containerWidth = containerRef.getBoundingClientRect().width;
+    let tableWidth = (ReactDOM.findDOMNode(
+      tableRef
+    ) as HTMLTableElement).getBoundingClientRect().width;
 
     let scrollbarWidth = tableWidth
       ? Math.pow(containerWidth, 2) / tableWidth
@@ -165,64 +157,46 @@ export class TableHorizontalScrollbar extends React.Component<IProps, IState> {
   private onMouseDown = (event: MouseEvent): void => {
     event.preventDefault();
 
-    this.setState({
-      isMoving: true,
-      previousMoveClientX: event.clientX
-    });
+    this.isMoving = true;
+    this.previousMoveClientX = event.clientX;
   };
 
   private onMouseMove = (event: MouseEvent): void => {
-    /* tslint:disable:prefer-const */
-    let {
-      percentageScrolled,
-      containerWidth,
-      scrollbarWidth,
-      isMoving,
-      previousMoveClientX
-    } = this.state;
-    /* tslint:enable:prefer-const */
+    let { scrollTo } = this.props;
+    let { containerWidth, scrollbarWidth } = this.state;
 
-    if (!isMoving) {
+    if (!this.isMoving) {
       return;
     }
 
     event.preventDefault();
 
-    const currentMoveClientX = event.clientX;
-    const deltaX = currentMoveClientX - previousMoveClientX;
+    let currentMoveClientX = event.clientX;
+    let deltaX = currentMoveClientX - this.previousMoveClientX;
 
-    const scrollbarMoveableDistance = containerWidth - scrollbarWidth;
+    let scrollbarMoveableDistance = containerWidth - scrollbarWidth;
 
-    percentageScrolled = scrollbarMoveableDistance
-      ? (scrollbarMoveableDistance * percentageScrolled + deltaX) /
+    scrollTo = scrollbarMoveableDistance
+      ? (scrollbarMoveableDistance * scrollTo + deltaX) /
         scrollbarMoveableDistance
       : 0;
 
-    percentageScrolled = Math.max(0, Math.min(percentageScrolled, 1));
+    scrollTo = Math.max(0, Math.min(scrollTo, 1));
 
-    previousMoveClientX = currentMoveClientX;
+    this.previousMoveClientX = currentMoveClientX;
 
-    this.props.onScroll(percentageScrolled);
-
-    this.setState({
-      percentageScrolled,
-      previousMoveClientX
-    });
+    this.props.onScroll(scrollTo);
   };
 
   private onMouseUp = (event: MouseEvent): void => {
-    const { isMoving } = this.state;
-
-    if (!isMoving) {
+    if (!this.isMoving) {
       return;
     }
 
     event.preventDefault();
 
-    this.setState({
-      isMoving: false,
-      previousMoveClientX: 0
-    });
+    this.isMoving = false;
+    this.previousMoveClientX = 0;
   };
 
   private onMouseOver = (): void => {

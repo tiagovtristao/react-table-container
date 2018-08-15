@@ -7,7 +7,6 @@ interface Props {
     foreground: React.CSSProperties;
     foregroundFocus: React.CSSProperties;
   };
-  customHeader?: Array<React.ComponentClass<any> | React.SFC<any>>;
   width: string;
   height: string;
   maxWidth?: string;
