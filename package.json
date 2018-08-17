@@ -36,7 +36,7 @@
     "prepare": "npm run clean && npm run build",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "lint": "tslint --project ./tsconfig.json --config ./tslint.json",
-    "prettify": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "prettify": "prettier --write  \"*.{js,json}\" \"(src|__tests__)/**/*.{ts,tsx}\"",
     "test": "jest"
   },
   "devDependencies": {
