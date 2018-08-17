@@ -32,12 +32,13 @@
   ],
   "scripts": {
     "clean": "rimraf lib es dist",
-    "build": "rollup -c",
-    "prepare": "npm run clean && npm run build",
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "lint": "tslint --project ./tsconfig.json --config ./tslint.json",
-    "prettify": "prettier --write  \"*.{js,json}\" \"(src|__tests__)/**/*.{ts,tsx}\"",
-    "test": "jest"
+    "prettify-check": "prettier --list-different  \"*.{js,json,yml}\" \"(src|__tests__)/**/*.{ts,tsx}\"",
+    "prettify": "prettier --write  \"*.{js,json,yml}\" \"(src|__tests__)/**/*.{ts,tsx}\"",
+    "test": "jest",
+    "build": "rollup -c",
+    "prepare": "npm run clean && npm run tslint-check && npm run lint && npm run prettify-check && npm test && npm run build"
   },
   "devDependencies": {
     "@types/jest": "^23.3.0",
