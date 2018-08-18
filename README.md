@@ -68,12 +68,10 @@ import ReactTableContainer from "react-table-container";
 
 let styles = theme => ({
   root: {
-    display: "inline-block",
-    marginTop: theme.spacing.unit * 3
+    display: "inline-block"
   },
   table: {
-    backgroundColor: "#ffffff",
-    minWidth: "700px"
+    backgroundColor: "#ffffff"
   },
 });
 
