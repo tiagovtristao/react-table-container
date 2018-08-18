@@ -3,10 +3,7 @@
     "alwaysStrict": true,
     "downlevelIteration": true,
     "jsx": "react",
-    "moduleResolution": "node",
-    "noImplicitAny": true
+    "moduleResolution": "node"
   },
-  "include":[
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }
