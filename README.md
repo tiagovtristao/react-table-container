@@ -124,7 +124,7 @@ function CustomMaterialUITableResizedWithFixedHeader(props) {
   );
 }
 
-export default withStyles(styles)(MaterialUITableResizedWithFixedHeader);
+export default withStyles(styles)(CustomMaterialUITableResizedWithFixedHeader);
 ```
 
 > **REQUIRED**
