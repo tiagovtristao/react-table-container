@@ -18,7 +18,7 @@ Usage
 
 **Example 1** (using HTML table elements only)
 
-```js
+```jsx
 import React from "react";
 import ReactTableContainer from "react-table-container";
 
@@ -55,7 +55,7 @@ export default CustomHTMLTableResizedWithFixedHeader;
 
 **Example 2** (using `@material-ui`)
 
-```js
+```jsx
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -68,12 +68,10 @@ import ReactTableContainer from "react-table-container";
 
 let styles = theme => ({
   root: {
-    display: "inline-block",
-    marginTop: theme.spacing.unit * 3
+    display: "inline-block"
   },
   table: {
-    backgroundColor: "#ffffff",
-    minWidth: "700px"
+    backgroundColor: "#ffffff"
   },
 });
 
@@ -124,7 +122,7 @@ function CustomMaterialUITableResizedWithFixedHeader(props) {
   );
 }
 
-export default withStyles(styles)(MaterialUITableResizedWithFixedHeader);
+export default withStyles(styles)(CustomMaterialUITableResizedWithFixedHeader);
 ```
 
 > **REQUIRED**
