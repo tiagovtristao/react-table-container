@@ -14,11 +14,13 @@ interface IDimensions {
 }
 
 interface IProps {
-  scrollbarStyle?: IScrollbarStyle;
+  style?: React.CSSProperties;
+  className?: string;
   width: string;
   height: string;
   maxWidth?: string;
   maxHeight?: string;
+  scrollbarStyle?: IScrollbarStyle;
 }
 
 interface IState {
@@ -127,11 +129,13 @@ export default class ReactTableContainer extends React.Component<
   public render(): JSX.Element {
     const {
       children,
-      scrollbarStyle,
+      style,
+      className,
       width,
       height,
       maxWidth,
-      maxHeight
+      maxHeight,
+      scrollbarStyle
     } = this.props;
     const {
       tableMarginTop,
@@ -156,6 +160,15 @@ export default class ReactTableContainer extends React.Component<
     if (maxHeight) {
       containerStyle.maxHeight = maxHeight;
     }
+
+    let containerProps = {
+      ref: ref => (this.containerRef = ref),
+      style: {
+        ...style,
+        ...containerStyle
+      },
+      className
+    };
 
     // Only one direct child (i.e. <table>) is allowed
     let table = React.Children.only(children) as React.ReactElement<any>;
@@ -189,7 +202,7 @@ export default class ReactTableContainer extends React.Component<
     };
 
     return (
-      <div ref={ref => (this.containerRef = ref)} style={containerStyle}>
+      <div {...containerProps}>
         {/* Header Table: It has the purpose of only using the original header to stick it to the top of the container */}
         {React.cloneElement(table, headerTableProps)}
 
