@@ -13,5 +13,5 @@ interface Props {
   maxHeight?: string;
 }
 
- export default class ReactTableContainer extends React.Component<Props> {}
+export default class ReactTableContainer extends React.Component<Props> {}
  

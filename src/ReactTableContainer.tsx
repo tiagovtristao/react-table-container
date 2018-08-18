@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as ReactDOM from "react-dom";
 import {
   TableVerticalScrollbar,
   IScrollbarStyle
@@ -38,21 +39,21 @@ export default class ReactTableContainer extends React.Component<
   IProps,
   IState
 > {
-  private readonly headerTableId = 0;
-  private readonly mainTableId = 1;
+  private readonly headerTableId = "header-table";
+  private readonly tableId = "main-table";
 
-  // HTML table header related elements
-  private readonly headerRelatedElements = ["colgroup", "thead"];
+  private timeoutId = null;
 
-  private timeoutId = -1;
+  private containerRef: HTMLDivElement;
+  private headerTableRef;
+  private tableRef;
 
-  private container: HTMLElement;
-  private table: HTMLTableElement;
-  private tbody: HTMLElement;
+  private tableTBody: HTMLElement;
 
   constructor(props: IProps) {
     super(props);
 
+    // Some of the state below could possibly be converted into instance properties, as they don't seem to directly play a role during any rendering
     this.state = {
       containerWidth: 0,
       containerHeight: 0,
@@ -69,29 +70,53 @@ export default class ReactTableContainer extends React.Component<
   }
 
   public componentDidMount(): void {
-    this.table = this.container.querySelector(
-      `[data-fht-id="${this.mainTableId}"]`
-    ) as HTMLTableElement;
-    this.tbody = this.table.querySelector("tbody");
+    // Now that we have the reference to the mounted Header Table, we can hide the body since only the header is needed
+    (ReactDOM.findDOMNode(
+      this.headerTableRef
+    ) as HTMLTableElement).querySelector("tbody").style.display =
+      "none";
 
-    this.tbody.addEventListener("wheel", this.onWheel);
+    // Set up the Main Table
+    let tableElement = ReactDOM.findDOMNode(this.tableRef) as HTMLTableElement;
 
-    this.tbody.addEventListener("touchstart", this.onTouchStart);
-    this.tbody.addEventListener("touchmove", this.onTouchMove);
-    this.tbody.addEventListener("touchend", this.onTouchEnd);
-    this.tbody.addEventListener("touchcancel", this.onTouchEnd);
+    this.tableTBody = tableElement.querySelector("tbody");
+
+    // Register listeners
+    this.tableTBody.addEventListener("wheel", this.onWheel);
+
+    this.tableTBody.addEventListener("touchstart", this.onTouchStart);
+    this.tableTBody.addEventListener("touchmove", this.onTouchMove);
+    this.tableTBody.addEventListener("touchend", this.onTouchEnd);
+    this.tableTBody.addEventListener("touchcancel", this.onTouchEnd);
 
     window.addEventListener("resize", this.onWindowResize);
 
-    const containerBoundingClientRect = this.container.getBoundingClientRect();
-    const tableBoundingClientRect = this.table.getBoundingClientRect();
+    // `getBoundingClientRect` can be called directly on the ref instance since it holds a DIV element instance
+    let containerBoundingClientRect = this.containerRef.getBoundingClientRect();
+    let tableBoundingClientRect = tableElement.getBoundingClientRect();
 
+    // Apply initial dimensions
     this.applyDimensions({
       containerWidth: containerBoundingClientRect.width,
       containerHeight: containerBoundingClientRect.height,
       tableWidth: tableBoundingClientRect.width,
       tableHeight: tableBoundingClientRect.height
     });
+
+    // Refs (which aren't null at this stage) must be propagated onto the scrollbar components.
+    // This could be achieved using `this.forceUpdate()` but the `this.applyDimensions` method above already triggers the required re-render.
+  }
+
+  public componentWillUnmount(): void {
+    // Remove listeners
+    this.tableTBody.removeEventListener("wheel", this.onWheel);
+
+    this.tableTBody.removeEventListener("touchstart", this.onTouchStart);
+    this.tableTBody.removeEventListener("touchmove", this.onTouchMove);
+    this.tableTBody.removeEventListener("touchend", this.onTouchEnd);
+    this.tableTBody.removeEventListener("touchcancel", this.onTouchEnd);
+
+    window.removeEventListener("resize", this.onWindowResize);
   }
 
   public componentDidUpdate(): void {
@@ -115,7 +140,7 @@ export default class ReactTableContainer extends React.Component<
       horizontalPercentageScrolled
     } = this.state;
 
-    const containerStyle: React.CSSProperties = {
+    let containerStyle: React.CSSProperties = {
       boxSizing: "border-box",
       position: "relative",
       display: "inline-block",
@@ -124,94 +149,70 @@ export default class ReactTableContainer extends React.Component<
       height
     };
 
-    if (maxWidth !== undefined) {
+    if (maxWidth) {
       containerStyle.maxWidth = maxWidth;
     }
 
-    if (maxHeight !== undefined) {
+    if (maxHeight) {
       containerStyle.maxHeight = maxHeight;
     }
 
-    const htmlTable = React.Children.only(children) as React.ReactElement<any>;
-
-    const htmlTableChildren = React.Children.toArray(
-      htmlTable.props.children
-    ) as Array<React.ReactElement<any>>;
-
-    // Extract out table header related html elements
-    const headerRelatedChildren = htmlTableChildren.filter(child => {
-      return (
-        typeof child.type === "string" &&
-        this.headerRelatedElements.indexOf(child.type as string) > -1
-      );
-    });
+    // Only one direct child (i.e. <table>) is allowed
+    let table = React.Children.only(children) as React.ReactElement<any>;
 
     // Set header table props
-    const headerTableProps = { ...htmlTable.props };
-
-    headerTableProps["data-fht-id"] = this.headerTableId;
-
-    const headerTableStyle = {
-      borderSpacing: 0,
-      position: "absolute",
-      top: 0,
-      left: -tableMarginLeft,
-      zIndex: 1
+    let headerTableProps = {
+      ...table.props,
+      ref: ref => (this.headerTableRef = ref),
+      "data-rtc-id": this.headerTableId, // Useful for targeting it outside the code base (i.e. testing)
+      style: {
+        ...table.props.style,
+        borderSpacing: 0,
+        position: "absolute",
+        top: 0,
+        left: -tableMarginLeft,
+        zIndex: 1
+      }
     };
 
-    headerTableProps.style = headerTableProps.style
-      ? { ...headerTableProps.style, ...headerTableStyle }
-      : headerTableStyle;
-
-    // Set main table props
-    const mainTableProps = { ...htmlTable.props };
-
-    mainTableProps["data-fht-id"] = this.mainTableId;
-
-    const mainTableStyle = {
-      borderSpacing: 0,
-      marginTop: -tableMarginTop,
-      marginLeft: -tableMarginLeft
+    // Set table props
+    let tableProps = {
+      ...table.props,
+      ref: ref => (this.tableRef = ref),
+      "data-rtc-id": this.tableId, // Useful for targeting it outside the code base (i.e. testing)
+      style: {
+        ...table.props.style,
+        borderSpacing: 0,
+        marginTop: -tableMarginTop,
+        marginLeft: -tableMarginLeft
+      }
     };
-
-    mainTableProps.style = mainTableProps.style
-      ? { ...mainTableProps.style, ...mainTableStyle }
-      : mainTableStyle;
 
     return (
-      <div ref={ref => (this.container = ref)} style={containerStyle}>
-        {React.cloneElement(htmlTable, headerTableProps, headerRelatedChildren)}
+      <div ref={ref => (this.containerRef = ref)} style={containerStyle}>
+        {/* Header Table: It has the purpose of only using the original header to stick it to the top of the container */}
+        {React.cloneElement(table, headerTableProps)}
 
-        {React.cloneElement(htmlTable, mainTableProps)}
+        {/* Main Table */}
+        {React.cloneElement(table, tableProps)}
 
         <TableVerticalScrollbar
-          customStyle={scrollbarStyle}
-          container={this.container}
-          table={this.table}
+          style={scrollbarStyle}
+          containerRef={this.containerRef}
+          tableRef={this.tableRef}
           scrollTo={verticalPercentageScrolled}
           onScroll={this.onVerticalScroll}
         />
 
         <TableHorizontalScrollbar
-          customStyle={scrollbarStyle}
-          container={this.container}
-          table={this.table}
+          style={scrollbarStyle}
+          containerRef={this.containerRef}
+          tableRef={this.tableRef}
           scrollTo={horizontalPercentageScrolled}
           onScroll={this.onHorizontalScroll}
         />
       </div>
     );
-  }
-
-  public componentWillUnmount(): void {
-    this.tbody.removeEventListener("wheel", this.onWheel);
-
-    this.tbody.removeEventListener("touchstart", this.onTouchStart);
-    this.tbody.removeEventListener("touchmove", this.onTouchMove);
-    this.tbody.removeEventListener("touchend", this.onTouchEnd);
-    this.tbody.removeEventListener("touchcancel", this.onTouchEnd);
-
-    window.removeEventListener("resize", this.onWindowResize);
   }
 
   private onWindowResize = (): void => {
@@ -221,25 +222,25 @@ export default class ReactTableContainer extends React.Component<
 
   // Make the header table's header cells the same width as the main table's header cells
   private refreshHeaders = (): void => {
-    const headerTableHeaderRow = this.container.querySelector(
-      `[data-fht-id="${this.headerTableId}"] thead tr:first-child`
-    );
-    const mainTableHeaderRow = this.container.querySelector(
-      `[data-fht-id="${this.mainTableId}"] thead tr:first-child`
-    );
+    let headerTableHeaderRow = (ReactDOM.findDOMNode(
+      this.headerTableRef
+    ) as HTMLTableElement).querySelector("thead > tr:first-child");
+    let tableHeaderRow = (ReactDOM.findDOMNode(
+      this.tableRef
+    ) as HTMLTableElement).querySelector("thead > tr:first-child");
 
-    if (headerTableHeaderRow && mainTableHeaderRow) {
-      const cellsWidth = [];
+    if (headerTableHeaderRow && tableHeaderRow) {
+      let cellsWidth = [];
 
       // All necessary reads are done first for increased performance
-      for (let i = 0; i < mainTableHeaderRow.children.length; i++) {
+      for (let i = 0; i < tableHeaderRow.children.length; i++) {
         cellsWidth.push(
-          mainTableHeaderRow.children.item(i).getBoundingClientRect().width
+          tableHeaderRow.children.item(i).getBoundingClientRect().width
         );
       }
 
-      for (let i = 0; i < mainTableHeaderRow.children.length; i++) {
-        const item = headerTableHeaderRow.children.item(i) as HTMLElement;
+      for (let i = 0; i < tableHeaderRow.children.length; i++) {
+        let item = headerTableHeaderRow.children.item(i) as HTMLElement;
 
         item.style.boxSizing = "border-box";
         item.style.minWidth = cellsWidth[i] + "px";
@@ -256,13 +257,16 @@ export default class ReactTableContainer extends React.Component<
       tableHeight
     } = this.state;
 
-    const containerBoundingClientRect = this.container.getBoundingClientRect();
-    const tableBoundingClientRect = this.table.getBoundingClientRect();
+    // `getBoundingClientRect` can be called directly on the ref instance since it holds a DIV element instance
+    let containerBoundingClientRect = this.containerRef.getBoundingClientRect();
+    let tableBoundingClientRect = (ReactDOM.findDOMNode(
+      this.tableRef
+    ) as HTMLTableElement).getBoundingClientRect();
 
-    const newContainerWidth = containerBoundingClientRect.width;
-    const newContainerHeight = containerBoundingClientRect.height;
-    const newTableWidth = tableBoundingClientRect.width;
-    const newTableHeight = tableBoundingClientRect.height;
+    let newContainerWidth = containerBoundingClientRect.width;
+    let newContainerHeight = containerBoundingClientRect.height;
+    let newTableWidth = tableBoundingClientRect.width;
+    let newTableHeight = tableBoundingClientRect.height;
 
     if (
       containerWidth !== newContainerWidth ||
@@ -279,6 +283,7 @@ export default class ReactTableContainer extends React.Component<
     }
   };
 
+  // For instance, if the table gets wider, the horizontal scrollbar will remain in the same place, but the amount of percentage scrolled will be now be less
   private applyDimensions(dimensions: IDimensions): void {
     let {
       tableMarginTop,
@@ -287,7 +292,7 @@ export default class ReactTableContainer extends React.Component<
       horizontalPercentageScrolled
     } = this.state;
 
-    const verticalMaxScrollable =
+    let verticalMaxScrollable =
       dimensions.tableHeight - dimensions.containerHeight;
 
     tableMarginTop = Math.max(
@@ -299,7 +304,7 @@ export default class ReactTableContainer extends React.Component<
       ? tableMarginTop / verticalMaxScrollable
       : 0;
 
-    const horizontalMaxScrollable =
+    let horizontalMaxScrollable =
       dimensions.tableWidth - dimensions.containerWidth;
 
     tableMarginLeft = Math.max(
@@ -351,7 +356,6 @@ export default class ReactTableContainer extends React.Component<
   private onWheel = (event: WheelEvent): void => {
     event.preventDefault();
 
-    /* tslint:disable:prefer-const */
     let {
       containerWidth,
       containerHeight,
@@ -362,7 +366,6 @@ export default class ReactTableContainer extends React.Component<
       tableMarginLeft,
       horizontalPercentageScrolled
     } = this.state;
-    /* tslint:enable:prefer-const */
 
     let deltaY = event.deltaY;
     let deltaX = event.deltaX;
@@ -374,12 +377,12 @@ export default class ReactTableContainer extends React.Component<
     }
 
     // Get vertical properties
-    const verticalMaxScrollable = Math.max(0, tableHeight - containerHeight);
-    const newTableMarginTop = tableMarginTop + deltaY;
+    let verticalMaxScrollable = Math.max(0, tableHeight - containerHeight);
+    let newTableMarginTop = tableMarginTop + deltaY;
 
     // Get horizontal properties
-    const horizontalMaxScrollable = Math.max(0, tableWidth - containerWidth);
-    const newTableMarginLeft = tableMarginLeft + deltaX;
+    let horizontalMaxScrollable = Math.max(0, tableWidth - containerWidth);
+    let newTableMarginLeft = tableMarginLeft + deltaX;
 
     this.setWindowScroll(
       verticalMaxScrollable,
@@ -425,7 +428,6 @@ export default class ReactTableContainer extends React.Component<
   private onTouchMove = (event: TouchEvent): void => {
     event.preventDefault();
 
-    /* tslint:disable:prefer-const */
     let {
       containerWidth,
       containerHeight,
@@ -437,23 +439,22 @@ export default class ReactTableContainer extends React.Component<
       previousSwipeClientX,
       previousSwipeClientY
     } = this.state;
-    /* tslint:enable:prefer-const */
 
     if (!isMoving) {
       return;
     }
 
     // Get vertical properties
-    const verticalMaxScrollable = Math.max(0, tableHeight - containerHeight);
-    const currentSwipeClientY = event.changedTouches[0].clientY;
-    const deltaY = previousSwipeClientY - currentSwipeClientY;
-    const newTableMarginTop = tableMarginTop + deltaY;
+    let verticalMaxScrollable = Math.max(0, tableHeight - containerHeight);
+    let currentSwipeClientY = event.changedTouches[0].clientY;
+    let deltaY = previousSwipeClientY - currentSwipeClientY;
+    let newTableMarginTop = tableMarginTop + deltaY;
 
     // Get horizontal properties
-    const horizontalMaxScrollable = Math.max(0, tableWidth - containerWidth);
-    const currentSwipeClientX = event.changedTouches[0].clientX;
-    const deltaX = previousSwipeClientX - currentSwipeClientX;
-    const newTableMarginLeft = tableMarginLeft + deltaX;
+    let horizontalMaxScrollable = Math.max(0, tableWidth - containerWidth);
+    let currentSwipeClientX = event.changedTouches[0].clientX;
+    let deltaX = previousSwipeClientX - currentSwipeClientX;
+    let newTableMarginLeft = tableMarginLeft + deltaX;
 
     this.setWindowScroll(
       verticalMaxScrollable,
@@ -468,7 +469,7 @@ export default class ReactTableContainer extends React.Component<
       Math.min(newTableMarginTop, verticalMaxScrollable)
     );
 
-    const verticalPercentageScrolled = verticalMaxScrollable
+    let verticalPercentageScrolled = verticalMaxScrollable
       ? tableMarginTop / verticalMaxScrollable
       : 0;
 
@@ -480,7 +481,7 @@ export default class ReactTableContainer extends React.Component<
       Math.min(newTableMarginLeft, horizontalMaxScrollable)
     );
 
-    const horizontalPercentageScrolled = horizontalMaxScrollable
+    let horizontalPercentageScrolled = horizontalMaxScrollable
       ? tableMarginLeft / horizontalMaxScrollable
       : 0;
 
@@ -507,9 +508,9 @@ export default class ReactTableContainer extends React.Component<
   private onVerticalScroll = (scrollTo: number): void => {
     const { containerHeight, tableHeight } = this.state;
 
-    const maxScrollable = tableHeight - containerHeight;
+    let maxScrollable = tableHeight - containerHeight;
 
-    const tableMarginTop = Math.max(
+    let tableMarginTop = Math.max(
       0,
       Math.min(scrollTo * maxScrollable, maxScrollable)
     );
@@ -523,9 +524,9 @@ export default class ReactTableContainer extends React.Component<
   private onHorizontalScroll = (scrollTo: number): void => {
     const { containerWidth, tableWidth } = this.state;
 
-    const maxScrollable = tableWidth - containerWidth;
+    let maxScrollable = tableWidth - containerWidth;
 
-    const tableMarginLeft = Math.max(
+    let tableMarginLeft = Math.max(
       0,
       Math.min(scrollTo * maxScrollable, maxScrollable)
     );
