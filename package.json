@@ -30,7 +30,7 @@
     "index.d.ts"
   ],
   "scripts": {
-    "clean-build": "rimraf lib es dist",
+    "clean": "rimraf lib es dist",
     "tslint-config-prettier-check": "tslint-config-prettier-check ./tslint.json",
     "lint": "tslint --project ./tsconfig.json --config ./tslint.json",
     "prettier-diff-check": "prettier --list-different  \"*.{js,json,yml}\" \"(src|__tests__)/**/*.{ts,tsx}\"",
@@ -39,7 +39,7 @@
     "build": "rollup -c",
     "ci": "npm run tslint-config-prettier-check && npm run lint && npm run prettier-diff-check && npm test",
     "preversion": "npm run ci",
-    "prepublishOnly": "npm run clean-build && npm run ci && npm run build"
+    "prepublishOnly": "npm run clean && npm run ci && npm run build"
   },
   "devDependencies": {
     "@types/jest": "^23.3.0",

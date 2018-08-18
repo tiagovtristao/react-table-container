@@ -56,38 +56,14 @@ export default CustomHTMLTableResizedWithFixedHeader;
 **Example 2** (using `@material-ui`)
 
 ```jsx
+// Based on https://github.com/mui-org/material-ui/blob/master/docs/src/pages/demos/tables/SimpleTable.js
 import React from "react";
-import { withStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+// Import components from `@material-ui/core`
 import ReactTableContainer from "react-table-container";
 
-let styles = theme => ({
-  root: {
-    display: "inline-block"
-  },
-  table: {
-    backgroundColor: "#ffffff"
-  },
-});
+// Define `styles`
 
-let id = 0;
-function createData(name, calories, fat, carbs, protein) {
-  id += 1;
-  return { id, name, calories, fat, carbs, protein };
-}
-
-let data = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9)
-];
+// Define `data`
 
 function CustomMaterialUITableResizedWithFixedHeader(props) {
   const { classes } = props;
@@ -129,14 +105,21 @@ export default withStyles(styles)(CustomMaterialUITableResizedWithFixedHeader);
 > 
 > The table's header mustn't be transparent, otherwise the body content will appear under it on scroll.
 
+Working Examples
+----------------
+
+- [Demos](https://codesandbox.io/s/pwr8ny4vn0?view=preview)
+
 Options
 -------
 
 * `width`: Any valid CSS value. **Required**.
 * `height`: Any valid CSS value. **Required**.
-* `maxWidth`: Any valid CSS value. **Optional**.
-* `maxHeight`: Any valid CSS value. **Optional**.
-* `scrollbarStyle`: Object (below) to change the default scrollbar style. **Optional**.
+* `maxWidth`: Any valid CSS value. *Optional*.
+* `maxHeight`: Any valid CSS value. *Optional*.
+* `style`: CSS-in-JS for the container itself. *Optional*.
+* `className`: CSS class name for the container itself. *Optional*.
+* `scrollbarStyle`: Object (below) to change the default scrollbar style. *Optional*.
    ```js
    {
      // How the container of the scrollbar should look like
@@ -166,7 +149,7 @@ Limitations
 Contributing
 ------------
 
-* Feel free to send pull requests for bug fixing. But make sure that running `npm run ci` succeeds before doing so;
+* Feel free to send pull requests for bug fixing. But make sure to run `npm run prettify` and `npm run ci` before doing so;
 * Please open an issue first for new features/ideas.
 
 License
