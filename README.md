@@ -18,7 +18,7 @@ Usage
 
 **Example 1** (using HTML table elements only)
 
-```js
+```jsx
 import React from "react";
 import ReactTableContainer from "react-table-container";
 
@@ -55,7 +55,7 @@ export default CustomHTMLTableResizedWithFixedHeader;
 
 **Example 2** (using `@material-ui`)
 
-```js
+```jsx
 import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
