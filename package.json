@@ -1,7 +1,7 @@
 {
   "name": "react-table-container",
   "version": "1.0.0",
-  "description": "It wraps the HTML <table> element (or any component rendering it) in a container of any specified dimensions while keeping its header fixed to the top during scrolling",
+  "description": "A React component that wraps the HTML <table> element (or any component rendering it) in a container of any specified dimensions while keeping its header fixed to the top during scrolling",
   "license": "MIT",
   "repository": {
     "type": "git",
