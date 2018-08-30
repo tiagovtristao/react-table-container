@@ -18,8 +18,7 @@ interface IProps {
   className?: string;
   width: string;
   height: string;
-  maxWidth?: string;
-  maxHeight?: string;
+  customHeader?: Array<React.ComponentClass<any> | React.SFC<any>>;
   scrollbarStyle?: IScrollbarStyle;
 }
 
@@ -41,14 +40,16 @@ export default class ReactTableContainer extends React.Component<
   IProps,
   IState
 > {
-  private readonly headerTableId = "header-table";
   private readonly tableId = "main-table";
+  private readonly headerTableId = "header-table";
+
+  private readonly headerRelatedHTMLElements = ["colgroup", "thead"];
 
   private timeoutId = null;
 
   private containerRef: HTMLDivElement;
-  private headerTableRef;
   private tableRef;
+  private headerTableRef;
 
   private tableTBody: HTMLElement;
 
@@ -72,12 +73,6 @@ export default class ReactTableContainer extends React.Component<
   }
 
   public componentDidMount(): void {
-    // Now that we have the reference to the mounted Header Table, we can hide the body since only the header is needed
-    (ReactDOM.findDOMNode(
-      this.headerTableRef
-    ) as HTMLTableElement).querySelector("tbody").style.display =
-      "none";
-
     // Set up the Main Table
     let tableElement = ReactDOM.findDOMNode(this.tableRef) as HTMLTableElement;
 
@@ -133,8 +128,7 @@ export default class ReactTableContainer extends React.Component<
       className,
       width,
       height,
-      maxWidth,
-      maxHeight,
+      customHeader,
       scrollbarStyle
     } = this.props;
     const {
@@ -153,14 +147,6 @@ export default class ReactTableContainer extends React.Component<
       height
     };
 
-    if (maxWidth) {
-      containerStyle.maxWidth = maxWidth;
-    }
-
-    if (maxHeight) {
-      containerStyle.maxHeight = maxHeight;
-    }
-
     let containerProps = {
       ref: ref => (this.containerRef = ref),
       style: {
@@ -172,21 +158,6 @@ export default class ReactTableContainer extends React.Component<
 
     // Only one direct child (i.e. <table>) is allowed
     let table = React.Children.only(children) as React.ReactElement<any>;
-
-    // Set header table props
-    let headerTableProps = {
-      ...table.props,
-      ref: ref => (this.headerTableRef = ref),
-      "data-rtc-id": this.headerTableId, // Useful for targeting it outside the code base (i.e. testing)
-      style: {
-        ...table.props.style,
-        borderSpacing: 0,
-        position: "absolute",
-        top: 0,
-        left: -tableMarginLeft,
-        zIndex: 1
-      }
-    };
 
     // Set table props
     let tableProps = {
@@ -201,10 +172,34 @@ export default class ReactTableContainer extends React.Component<
       }
     };
 
+    // Set header table props
+    let headerTableProps = {
+      ...table.props,
+      ref: ref => (this.headerTableRef = ref),
+      "data-rtc-id": this.headerTableId, // Useful for targeting it outside the code base (i.e. testing)
+      style: {
+        ...table.props.style,
+        borderSpacing: 0,
+        position: "absolute",
+        top: 0,
+        left: -tableMarginLeft,
+        zIndex: 1
+      },
+      role: "presentation",
+      "aria-hidden": "true"
+    };
+
+    let tableChildren = React.Children.toArray(table.props.children) as Array<React.ReactElement<any>>;
+
+    let headerRelatedItems = customHeader ? [...this.headerRelatedHTMLElements, ...customHeader] : this.headerRelatedHTMLElements;
+
+    // Extract out header related children
+    let headerRelatedChildren = tableChildren.filter(({ type }) => headerRelatedItems.indexOf(type) !== -1);
+
     return (
       <div {...containerProps}>
-        {/* Header Table: It has the purpose of only using the original header to stick it to the top of the container */}
-        {React.cloneElement(table, headerTableProps)}
+        {/* Header Table: It has the purpose of only using header related children to stick them to the top of the container */}
+        {React.cloneElement(table, headerTableProps, headerRelatedChildren)}
 
         {/* Main Table */}
         {React.cloneElement(table, tableProps)}
@@ -255,7 +250,6 @@ export default class ReactTableContainer extends React.Component<
       for (let i = 0; i < tableHeaderRow.children.length; i++) {
         let item = headerTableHeaderRow.children.item(i) as HTMLElement;
 
-        item.style.boxSizing = "border-box";
         item.style.minWidth = cellsWidth[i] + "px";
       }
     }
