@@ -250,6 +250,7 @@ export default class ReactTableContainer extends React.Component<
       for (let i = 0; i < tableHeaderRow.children.length; i++) {
         let item = headerTableHeaderRow.children.item(i) as HTMLElement;
 
+        item.style.boxSizing = "border-box";
         item.style.minWidth = cellsWidth[i] + "px";
       }
     }
