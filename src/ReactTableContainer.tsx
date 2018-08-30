@@ -51,7 +51,7 @@ export default class ReactTableContainer extends React.Component<
   private tableRef;
   private headerTableRef;
 
-  private tableTBody: HTMLElement;
+  private tableElement: HTMLElement;
 
   constructor(props: IProps) {
     super(props);
@@ -74,23 +74,21 @@ export default class ReactTableContainer extends React.Component<
 
   public componentDidMount(): void {
     // Set up the Main Table
-    let tableElement = ReactDOM.findDOMNode(this.tableRef) as HTMLTableElement;
-
-    this.tableTBody = tableElement.querySelector("tbody");
+    this.tableElement = ReactDOM.findDOMNode(this.tableRef) as HTMLTableElement;
 
     // Register listeners
-    this.tableTBody.addEventListener("wheel", this.onWheel);
+    this.tableElement.addEventListener("wheel", this.onWheel);
 
-    this.tableTBody.addEventListener("touchstart", this.onTouchStart);
-    this.tableTBody.addEventListener("touchmove", this.onTouchMove);
-    this.tableTBody.addEventListener("touchend", this.onTouchEnd);
-    this.tableTBody.addEventListener("touchcancel", this.onTouchEnd);
+    this.tableElement.addEventListener("touchstart", this.onTouchStart);
+    this.tableElement.addEventListener("touchmove", this.onTouchMove);
+    this.tableElement.addEventListener("touchend", this.onTouchEnd);
+    this.tableElement.addEventListener("touchcancel", this.onTouchEnd);
 
     window.addEventListener("resize", this.onWindowResize);
 
     // `getBoundingClientRect` can be called directly on the ref instance since it holds a DIV element instance
     let containerBoundingClientRect = this.containerRef.getBoundingClientRect();
-    let tableBoundingClientRect = tableElement.getBoundingClientRect();
+    let tableBoundingClientRect = this.tableElement.getBoundingClientRect();
 
     // Apply initial dimensions
     this.applyDimensions({
@@ -106,12 +104,12 @@ export default class ReactTableContainer extends React.Component<
 
   public componentWillUnmount(): void {
     // Remove listeners
-    this.tableTBody.removeEventListener("wheel", this.onWheel);
+    this.tableElement.removeEventListener("wheel", this.onWheel);
 
-    this.tableTBody.removeEventListener("touchstart", this.onTouchStart);
-    this.tableTBody.removeEventListener("touchmove", this.onTouchMove);
-    this.tableTBody.removeEventListener("touchend", this.onTouchEnd);
-    this.tableTBody.removeEventListener("touchcancel", this.onTouchEnd);
+    this.tableElement.removeEventListener("touchstart", this.onTouchStart);
+    this.tableElement.removeEventListener("touchmove", this.onTouchMove);
+    this.tableElement.removeEventListener("touchend", this.onTouchEnd);
+    this.tableElement.removeEventListener("touchcancel", this.onTouchEnd);
 
     window.removeEventListener("resize", this.onWindowResize);
   }
