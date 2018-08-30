@@ -70,7 +70,7 @@ function CustomMaterialUITableResizedWithFixedHeader(props) {
 
   return (
     <Paper className={classes.root}>
-      <ReactTableContainer width="auto" height="200px">
+      <ReactTableContainer width="auto" height="200px" customHeader={[TableHead]}>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
@@ -115,8 +115,7 @@ Options
 
 * `width`: Any valid CSS value. **Required**.
 * `height`: Any valid CSS value. **Required**.
-* `maxWidth`: Any valid CSS value. *Optional*.
-* `maxHeight`: Any valid CSS value. *Optional*.
+* `customHeader`: List of React component children that render `colgroup` or `thead` elements. *Optional*.
 * `style`: CSS-in-JS for the container itself. *Optional*.
 * `className`: CSS class name for the container itself. *Optional*.
 * `scrollbarStyle`: Object (below) to change the default scrollbar style. *Optional*.
@@ -144,7 +143,7 @@ Options
 Limitations
 -----------
 
-* HTML `caption` and `tfoot` table elements are currently not supported. Using them might cause unexpected behaviour.
+* HTML `caption` table element is currently not supported. Using it might cause unexpected behaviour.
 
 Contributing
 ------------
