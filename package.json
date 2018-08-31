@@ -10,11 +10,9 @@
   "bugs": "https://github.com/tiagovtristao/react-table-container/issues",
   "keywords": [
     "react",
-    "table",
-    "container",
-    "thead",
-    "header",
     "fixed",
+    "table",
+    "header",
     "scroll"
   ],
   "author": "Tiago Tristao (https://github.com/tiagovtristao)",
