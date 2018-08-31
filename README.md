@@ -1,22 +1,50 @@
-ReactTableContainer
-===================
+<h1 style="text-align: center;">
+  ReactTableContainer
+</h1>
 
-It wraps the HTML **\<table\>** element (or a component rendering it) in a container of any specified dimensions while keeping its header fixed to the top during scrolling.
+<p style="text-align: center;">
+  A React component that wraps the HTML <strong>&lt;table&gt;</strong> element in a container of any specified dimensions <br />
+  while keeping its header fixed to the top during scrolling.
+</p>
 
-* Table header event listeners are preserved;
-* Tested on Chrome (Desktop & Mobile), Firefox, Safari, Edge and IE11.
+<br />
+<br />
 
-Installation
-------------
+<p style="text-align: center;">
+  <a href="#installation">Installation</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#api">API</a> •
+  <a href="#limitations">Limitations</a> •
+  <a href="#contributing">Contributing</a>
+</p>
+
+<p style="text-align: center;">
+  <a href="https://travis-ci.org/tiagovtristao/react-table-container/">
+    <img src="https://travis-ci.org/tiagovtristao/react-table-container.svg?branch=master" />
+  </a>
+  <a href="https://unpkg.com/react-table-container/dist/react-table-container.min.js">
+    <img src="https://img.badgesize.io/https://unpkg.com/react-table-container/dist/react-table-container.min.js?compression=gzip&amp;label=size&amp;maxAge=300" />
+  </a>
+  <a href="./package.json">
+    <img src="https://img.shields.io/npm/v/react-table-container.svg?maxAge=300&label=version&colorB=007ec6&maxAge=300" />
+  </a>
+  <a href="./LICENSE.md">
+    <img src="https://img.shields.io/npm/l/slate.svg?maxAge=300" />
+  </a>
+</p>
+
+<br />
+<br />
+
+## Installation
 
 ```bash
 npm install --save react-table-container
 ```
 
-Usage
------
+<br />
 
-**Example 1** (using HTML table elements only)
+## Usage
 
 ```jsx
 import React from "react";
@@ -53,7 +81,9 @@ const CustomHTMLTableResizedWithFixedHeader = () => (
 export default CustomHTMLTableResizedWithFixedHeader;
 ```
 
-**Example 2** (using `@material-ui`)
+<br />
+
+**Is there support for React components that render HTML table elements?** Yes, the `customHeader` prop (as seen below) exists as an escape hatch for this purpose. The table's direct child components that render `thead` and `colgroup` elements must be passed to it. This is required in order to successfully stick the custom table header to the top.
 
 ```jsx
 // Based on https://github.com/mui-org/material-ui/blob/master/docs/src/pages/demos/tables/SimpleTable.js
@@ -101,52 +131,51 @@ function CustomMaterialUITableResizedWithFixedHeader(props) {
 export default withStyles(styles)(CustomMaterialUITableResizedWithFixedHeader);
 ```
 
+<br />
+
+## API
+
+- `<ReactTableContainer width height>`
+  - `width`: Any valid CSS value. **Required**.
+  - `height`: Any valid CSS value. **Required**.
+  - `customHeader`: List of table's direct child components that render `thead` and `colgroup` elements.
+  - `style`: CSS-in-JS for the container itself. *Optional*.
+  - `className`: CSS class name for the container itself. *Optional*.
+  - `scrollbarStyle`: Object (below) to change the default scrollbar style. *Optional*.
+    ```js
+    {
+      // How the container of the scrollbar should look like
+      background: {
+        /* Any valid CSS properties or empty */
+      },
+      // How the container should look like on mouse over
+      backgroundFocus: {
+        /* Any valid CSS properties or empty */
+      },
+      // How the scrollbar should look like
+      foreground: {
+        /* Any valid CSS properties or empty */
+      },
+      // How it should look like on mouse over
+      foregroundFocus: {
+        /* Any valid CSS properties or empty */
+      }
+    }
+    ```
+
 > **REQUIRED**
 > 
 > The table's header mustn't be transparent, otherwise the body content will appear under it on scroll.
 
-Options
--------
+<br />
 
-* `width`: Any valid CSS value. **Required**.
-* `height`: Any valid CSS value. **Required**.
-* `customHeader`: List of React component children that render `colgroup` or `thead` elements. *Optional*.
-* `style`: CSS-in-JS for the container itself. *Optional*.
-* `className`: CSS class name for the container itself. *Optional*.
-* `scrollbarStyle`: Object (below) to change the default scrollbar style. *Optional*.
-   ```js
-   {
-     // How the container of the scrollbar should look like
-     background: {
-       /* Any valid CSS properties or empty */
-     },
-     // How the container should look like on mouse over
-     backgroundFocus: {
-       /* Any valid CSS properties or empty */
-     },
-     // How the scrollbar should look like
-     foreground: {
-       /* Any valid CSS properties or empty */
-     },
-     // How it should look like on mouse over
-     foregroundFocus: {
-       /* Any valid CSS properties or empty */
-     }
-   }
-   ```
+## Limitations
 
-Limitations
------------
+- HTML `caption` table element is currently not supported. Using it might cause unexpected behaviour.
 
-* HTML `caption` table element is currently not supported. Using it might cause unexpected behaviour.
+<br />
 
-Contributing
-------------
+## Contributing
 
-* Feel free to send pull requests for bug fixing. But make sure to run `npm run prettify` and `npm run ci` before doing so;
-* Please open an issue first for new features/ideas.
-
-License
--------
-
-MIT
+- Feel free to send pull requests for bug fixing. But make sure to run `npm run prettify` and `npm run ci` before doing so;
+- Please open an issue first for new features/ideas.
