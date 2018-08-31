@@ -139,9 +139,9 @@ export default withStyles(styles)(CustomMaterialUITableResizedWithFixedHeader);
   - `width`: Any valid CSS value. **Required**.
   - `height`: Any valid CSS value. **Required**.
   - `customHeader`: List of table's direct child components that render `thead` and `colgroup` elements.
-  - `style`: CSS-in-JS for the container itself. *Optional*.
-  - `className`: CSS class name for the container itself. *Optional*.
-  - `scrollbarStyle`: Object (below) to change the default scrollbar style. *Optional*.
+  - `style`: CSS-in-JS for the container itself.
+  - `className`: CSS class name for the container itself.
+  - `scrollbarStyle`: Object (below) to change the default scrollbar style.
     ```js
     {
       // How the container of the scrollbar should look like
