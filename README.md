@@ -105,11 +105,6 @@ export default withStyles(styles)(CustomMaterialUITableResizedWithFixedHeader);
 > 
 > The table's header mustn't be transparent, otherwise the body content will appear under it on scroll.
 
-Working Examples
-----------------
-
-- [Demos](https://codesandbox.io/s/pwr8ny4vn0?view=preview)
-
 Options
 -------
 
