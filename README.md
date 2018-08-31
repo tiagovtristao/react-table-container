@@ -26,7 +26,7 @@
     <img src="https://img.badgesize.io/https://unpkg.com/react-table-container@next/dist/react-table-container.min.js?compression=gzip&amp;label=size&amp;maxAge=300" />
   </a>
   <a href="./package.json">
-    <img src="https://img.shields.io/npm/v/react-table-container.svg?maxAge=300&label=version&colorB=007ec6&maxAge=300" />
+    <img src="https://img.shields.io/npm/v/react-table-container/next.svg?maxAge=300&label=version&colorB=007ec6&maxAge=300" />
   </a>
   <a href="./LICENSE.md">
     <img src="https://img.shields.io/npm/l/slate.svg?maxAge=300" />
