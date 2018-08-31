@@ -1,8 +1,8 @@
-<h1 style="text-align: center;">
+<h1 align="center">
   ReactTableContainer
 </h1>
 
-<p style="text-align: center;">
+<p align="center">
   A React component that wraps the HTML <strong>&lt;table&gt;</strong> element in a container of any specified dimensions <br />
   while keeping its header fixed to the top during scrolling.
 </p>
@@ -10,7 +10,7 @@
 <br />
 <br />
 
-<p style="text-align: center;">
+<p align="center">
   <a href="#installation">Installation</a> •
   <a href="#usage">Usage</a> •
   <a href="#api">API</a> •
@@ -18,7 +18,7 @@
   <a href="#contributing">Contributing</a>
 </p>
 
-<p style="text-align: center;">
+<p align="center">
   <a href="https://travis-ci.org/tiagovtristao/react-table-container/">
     <img src="https://travis-ci.org/tiagovtristao/react-table-container.svg?branch=master" />
   </a>
