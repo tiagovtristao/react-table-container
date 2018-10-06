@@ -1,7 +1,7 @@
 {
   "name": "react-table-container",
-  "version": "1.1.0",
-  "description": "A React component that wraps the HTML <table> element (or any component rendering it) in a container of any specified dimensions while keeping its header fixed to the top during scrolling",
+  "version": "2.0.0-0",
+  "description": "A React component that wraps the HTML <table> element in a container of any specified dimensions while keeping its header fixed to the top during scrolling",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -10,11 +10,9 @@
   "bugs": "https://github.com/tiagovtristao/react-table-container/issues",
   "keywords": [
     "react",
-    "table",
-    "container",
-    "thead",
-    "header",
     "fixed",
+    "table",
+    "header",
     "scroll"
   ],
   "author": "Tiago Tristao (https://github.com/tiagovtristao)",

@@ -5,8 +5,7 @@ interface Props {
   className?: string;
   width: string;
   height: string;
-  maxWidth?: string;
-  maxHeight?: string;
+  customHeader?: Array<React.ComponentClass<any> | React.SFC<any>>;
   scrollbarStyle?: {
     background: React.CSSProperties;
     backgroundFocus: React.CSSProperties;
