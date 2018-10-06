@@ -20,13 +20,13 @@
 
 <p align="center">
   <a href="https://travis-ci.org/tiagovtristao/react-table-container/">
-    <img src="https://travis-ci.org/tiagovtristao/react-table-container.svg?branch=next" />
+    <img src="https://travis-ci.org/tiagovtristao/react-table-container.svg?branch=master" />
   </a>
-  <a href="https://unpkg.com/react-table-container@next/dist/react-table-container.min.js">
-    <img src="https://img.badgesize.io/https://unpkg.com/react-table-container@next/dist/react-table-container.min.js?compression=gzip&amp;label=size&amp;maxAge=300" />
+  <a href="https://unpkg.com/react-table-container@latest/dist/react-table-container.min.js">
+    <img src="https://img.badgesize.io/https://unpkg.com/react-table-container@latest/dist/react-table-container.min.js?compression=gzip&amp;label=size&amp;maxAge=300" />
   </a>
   <a href="./package.json">
-    <img src="https://img.shields.io/npm/v/react-table-container/next.svg?maxAge=300&label=version&colorB=007ec6&maxAge=300" />
+    <img src="https://img.shields.io/npm/v/react-table-container/latest.svg?maxAge=300&label=version&colorB=007ec6&maxAge=300" />
   </a>
   <a href="./LICENSE.md">
     <img src="https://img.shields.io/npm/l/slate.svg?maxAge=300" />
