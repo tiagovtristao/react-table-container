@@ -154,12 +154,12 @@ export class TableVerticalScrollbar extends React.Component<IProps, IState> {
     let theadHeight = tableElement
       .querySelector("thead")
       .getBoundingClientRect().height;
-    let tbodyHeight = tableHeight - theadHeight;
+    let noHeaderTableHeight = tableHeight - theadHeight;
 
     let visibleContainerHeight = containerHeight - theadHeight;
 
-    let scrollbarHeight = tbodyHeight
-      ? Math.pow(visibleContainerHeight, 2) / tbodyHeight
+    let scrollbarHeight = noHeaderTableHeight
+      ? Math.pow(visibleContainerHeight, 2) / noHeaderTableHeight
       : 0;
 
     scrollbarHeight = Math.max(
