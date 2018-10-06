@@ -13,6 +13,7 @@
 <p align="center">
   <a href="#installation">Installation</a> •
   <a href="#usage">Usage</a> •
+  <a href="#demo">Demo</a> •
   <a href="#api">API</a> •
   <a href="#limitations">Limitations</a> •
   <a href="#contributing">Contributing</a>
@@ -130,6 +131,12 @@ function CustomMaterialUITableResizedWithFixedHeader(props) {
 
 export default withStyles(styles)(CustomMaterialUITableResizedWithFixedHeader);
 ```
+
+<br />
+
+## Demo
+
+- [Examples](https://pwr8ny4vn0.codesandbox.io/)
 
 <br />
 
